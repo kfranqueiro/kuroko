@@ -1,0 +1,4 @@
+dist
+electron
+node_modules
+src/resources/**/*.css
