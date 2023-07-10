@@ -35,7 +35,13 @@ Kuroko provides a drag-and-drop GUI for rearranging performances in C7A files us
 
 ### Release
 
-TK
+It is possible to build for all platforms from OS X.
+
+`brew install fakeroot dpkg wine-stable` to install prequisites
+
+`npm run make-all` to build for all platforms under `out` subfolder
+
+On other platforms, `npm run make` will build for the current platform only.
 
 ## License
 
