@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Main Process",
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceFolder}",
+        "runtimeExecutable": "npm",
+        "windows": {
+          "runtimeExecutable": "npm"
+        },
+        "args" : ["start"],
+        "outputCapture": "std"
+      }
+    ]
+  }

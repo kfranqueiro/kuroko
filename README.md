@@ -27,16 +27,15 @@ Kuroko provides a drag-and-drop GUI for rearranging performances in C7A files us
 
 ### Setup
 
-1. `npm install`
+`npm i`
 
 ### Development
 
-1. `grunt dev` (requires `grunt-cli` installed globally)
-1. `bin/run`
+`npm start`
 
 ### Release
 
-`grunt release`
+TK
 
 ## License
 

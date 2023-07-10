@@ -1,18 +1,33 @@
 {
-	"name": "kuroko",
-	"description": "A drag-and-drop GUI for rearranging performances in C7A files used by the Yamaha CP4 Stage Piano.",
-	"version": "0.1.0",
-	"main": "src/main/main.js",
-	"author": "Kenneth G. Franqueiro",
-	"license": "MIT",
-	"repository": "kfranqueiro/kuroko",
-	"devDependencies": {
-		"electron-download": "~1.4.1",
-		"electron-packager": "5.2.0",
-		"extract-zip": "~1.4.1",
-		"grunt": "~0.4.5",
-		"grunt-contrib-clean": "~0.7.0",
-		"grunt-contrib-stylus": "~0.22.0",
-		"grunt-contrib-watch": "~0.6.1"
-	}
+  "name": "kuroko",
+  "description": "A drag-and-drop GUI for rearranging performances in C7A files used by the Yamaha CP4 Stage Piano.",
+  "version": "0.2.0",
+  "main": "src/main/main.js",
+  "author": "Kenneth G. Franqueiro",
+  "license": "MIT",
+  "repository": "kfranqueiro/kuroko",
+  "scripts": {
+    "fix": "eslint --fix .",
+    "lint": "eslint .",
+    "make": "electron-forge make",
+    "make-all": "electron-forge make --platform=darwin && electron-forge make --platform=linux && electron-forge make --platform=win32",
+    "package": "electron-forge package",
+    "start": "cross-env KUROKO_DEV=1 electron-forge start"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "cross-env": "^7.0.3",
+    "electron": "^25.2.0",
+    "eslint": "^8.44.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.8"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
 }

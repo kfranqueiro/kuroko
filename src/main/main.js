@@ -1,53 +1,38 @@
-'use strict';
-const pathUtil = require('path');
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const ipc = electron.ipcMain;
-const Menu = electron.Menu;
+"use strict";
+const { join, resolve } = require("path");
+const { BrowserWindow, Menu, app, ipcMain, session } = require("electron");
 
-const menuTemplate = require('./menu');
-const title = 'Kuroko';
+const { TITLE } = require("./constants");
+const { updateWindowForFile, updateWindowForDirtyState } = require("./window");
+const menu = require("./menu");
 
-let mainWindow;
-let menu;
+app.on("window-all-closed", () => app.quit());
 
-app.on('window-all-closed', function () {
-	app.quit();
-});
+app.whenReady().then(() => {
+  session.defaultSession.webRequest.onHeadersReceived((details, cb) => {
+    cb({
+      responseHeaders: {
+        ...details.responseHeaders,
+        "Content-Security-Policy": "script-src 'self'",
+      },
+    });
+  });
 
-app.on('ready', function () {
-	mainWindow = new BrowserWindow({
-		center: true,
-		title: title,
-		height: 420,
-		minHeight: 420,
-		width: 1000,
-		minWidth: 800
-	});
+  const mainWindow = new BrowserWindow({
+    center: true,
+    title: TITLE,
+    height: 420,
+    minHeight: 420,
+    width: 1000,
+    minWidth: 800,
+    webPreferences: {
+      preload: join(__dirname, "preload.js"),
+    },
+  });
 
-	menu = Menu.buildFromTemplate(menuTemplate);
-	Menu.setApplicationMenu(menu);
-	mainWindow.loadURL('file://' + require('path').resolve(__dirname, '..', 'index.html'));
+  Menu.setApplicationMenu(menu);
+  mainWindow.loadURL(`file://${resolve(__dirname, "..", "index.html")}`);
 
-	mainWindow.on('closed', function () {
-		mainWindow = null;
-	});
-});
-
-let displayedFilename;
-ipc.on('file-loaded', function (event, filename) {
-	displayedFilename = pathUtil.basename(filename);
-	mainWindow.setTitle(displayedFilename + ' - ' + title);
-	mainWindow.setRepresentedFilename(filename);
-	mainWindow.setDocumentEdited(false);
-
-	menu.items[0].submenu.items.forEach(function (item) {
-		item.enabled = true;
-	});
-});
-
-ipc.on('dirty', function (event, isDirty) {
-	mainWindow.setTitle(displayedFilename + (isDirty ? '*' : '') + ' - ' + title);
-	mainWindow.setDocumentEdited(isDirty);
+  ipcMain.on("file-loaded", (_, filename) => updateWindowForFile(mainWindow, filename));
+  ipcMain.on("dirty", (_, isDirty) => updateWindowForDirtyState(mainWindow, isDirty));
 });

@@ -1,4 +1,2 @@
-dist
-electron
-node_modules
-src/resources/**/*.css
+node_modules/
+out/
