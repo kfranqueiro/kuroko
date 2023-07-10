@@ -6,11 +6,6 @@ const { updateWindowForFile, updateWindowForDirtyState } = require("./window");
 
 const isDarwin = process.platform === "darwin";
 
-function send() {
-  const webContents = BrowserWindow.getAllWindows()[0].webContents;
-  webContents.send.apply(webContents, arguments);
-}
-
 /**
  * Determines the current order of performances from the DOM in the renderer process.
  * @returns Promise<number[]>
@@ -38,9 +33,9 @@ const menuTemplate = [
             try {
               const performances = await load(filePaths[0]);
               updateWindowForFile(window, filePaths[0]);
-              send("performances-loaded", performances);
+              window.webContents.send("performances-loaded", performances);
             } catch (error) {
-              send("alert", `Error loading file: ${error.message}`);
+              window.webContents.send("alert", `Error loading file: ${error.message}`);
             }
           }
         },
@@ -54,7 +49,7 @@ const menuTemplate = [
             await save(await getIndices());
             updateWindowForDirtyState(window, false);
           } catch (error) {
-            send("alert", `Error saving file: ${error.message}`);
+            window.webContents.send("alert", `Error saving file: ${error.message}`);
           }
         },
       },
@@ -71,7 +66,7 @@ const menuTemplate = [
               await save(await getIndices(), filePath);
               updateWindowForFile(window, filePath);
             } catch (error) {
-              send("alert", `Error saving file: ${error.message}`);
+              window.webContents.send("alert", `Error saving file: ${error.message}`);
             }
           }
         },
@@ -83,10 +78,10 @@ const menuTemplate = [
         async click(_, window) {
           try {
             const performances = await load();
-            send("performances-loaded", performances);
+            window.webContents.send("performances-loaded", performances);
             updateWindowForDirtyState(window, false);
           } catch (error) {
-            send("alert", `Error loading file: ${error.message}`);
+            window.webContents.send("alert", `Error loading file: ${error.message}`);
           }
         },
       },
